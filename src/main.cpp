@@ -4,6 +4,15 @@
 #include <GL/glut.h>
 #include <cstdio>
 
+/*** Globals ***/
+struct Paddle {
+  float y_pos{0};
+  int state{1}; // temp paddle state for movement
+};
+
+Paddle player;
+
+/*** inits ***/
 void init() {
   glClearColor(0.0, 0.0, 0.0, 1.0);
 }
@@ -15,10 +24,10 @@ void display() {
 
   glBegin(GL_QUADS);
 
-  glVertex2f(-9, 1);
-  glVertex2f(-9, -1);
-  glVertex2f(-8, -1);
-  glVertex2f(-8, 1);
+  glVertex2f(-9, 1 + player.y_pos);
+  glVertex2f(-9, -1 + player.y_pos);
+  glVertex2f(-8, -1 + player.y_pos);
+  glVertex2f(-8, 1 + player.y_pos);
 
   glEnd();
 
@@ -39,6 +48,24 @@ void reshape(int w, int h) {
 void timer(int) { // not using int so i'm not specifying it...
   glutPostRedisplay();
   glutTimerFunc(1000/60, timer, 0); // 1000/60 = 60fps window refresh rate
+  
+  // lets move the paddle up & down agnostic of keypresses
+  if (player.state == 1) {
+    if (player.y_pos < 9) {
+      player.y_pos += 0.2;
+    } else {
+      player.state = -1;
+    }
+  } else if (player.state == -1) {
+    if (player.y_pos > -9) {
+      player.y_pos -= 0.2;
+    } else {
+      player.state = 1;
+    }
+  } else {
+    printf("paddle state error");
+    exit(1);
+  }
 }
 
 /*** Entry Point ***/
