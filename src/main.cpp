@@ -24,10 +24,17 @@ void display() {
 
   glBegin(GL_QUADS);
 
-  glVertex2f(-9, 1 + player.y_pos);
-  glVertex2f(-9, -1 + player.y_pos);
+  glVertex2f(-8.5, 1 + player.y_pos);
+  glVertex2f(-8.5, -1 + player.y_pos);
   glVertex2f(-8, -1 + player.y_pos);
   glVertex2f(-8, 1 + player.y_pos);
+
+  glEnd();
+  
+  glPointSize(10.0);
+  glBegin(GL_POINTS);
+  
+  glVertex2f(0, 0);
 
   glEnd();
 
