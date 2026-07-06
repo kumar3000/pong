@@ -2,15 +2,17 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 #include <GL/glut.h>
-#include <cstdio>
+#include <iostream>
+#include <cstdlib>
+#include "Paddle.h"
 
 /*** Globals ***/
-struct Paddle {
-  float y_pos{0};
-  int state{1}; // temp paddle state for movement
-};
-
 Paddle player;
+
+void debug(std::string error) {
+  std::cout << error << std::endl;
+  exit(1);
+}
 
 /*** inits ***/
 void init() {
@@ -24,16 +26,16 @@ void display() {
 
   glBegin(GL_QUADS);
 
-  glVertex2f(-8.5, 1 + player.y_pos);
-  glVertex2f(-8.5, -1 + player.y_pos);
-  glVertex2f(-8, -1 + player.y_pos);
-  glVertex2f(-8, 1 + player.y_pos);
+  glVertex2f(-8.5, 1.0 + player.getYPos());
+  glVertex2f(-8.5, -1.0 + player.getYPos());
+  glVertex2f(-8.0, -1.0 + player.getYPos());
+  glVertex2f(-8.0, 1.0 + player.getYPos());
 
   glEnd();
-  
+
   glPointSize(10.0);
   glBegin(GL_POINTS);
-  
+
   glVertex2f(0, 0);
 
   glEnd();
@@ -55,23 +57,9 @@ void reshape(int w, int h) {
 void timer(int) { // not using int so i'm not specifying it...
   glutPostRedisplay();
   glutTimerFunc(1000/60, timer, 0); // 1000/60 = 60fps window refresh rate
-  
-  // lets move the paddle up & down agnostic of keypresses
-  if (player.state == 1) {
-    if (player.y_pos < 9) {
-      player.y_pos += 0.2;
-    } else {
-      player.state = -1;
-    }
-  } else if (player.state == -1) {
-    if (player.y_pos > -9) {
-      player.y_pos -= 0.2;
-    } else {
-      player.state = 1;
-    }
-  } else {
-    printf("paddle state error");
-    exit(1);
+
+  if (player.movePaddle() == 1) {
+    debug("player.movePaddle() { error }");
   }
 }
 
