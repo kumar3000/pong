@@ -11,7 +11,8 @@
 #define STEP_SIZE 0.5 // 0.0 to 10.0
 
 /*** Globals ***/
-Paddle player;
+Paddle player(1, 0.0);
+Paddle &mirror = player;
 
 /*** Utilities ***/
 void debug(std::string error) {
@@ -29,12 +30,17 @@ void display() {
   glLoadIdentity();
 
   glBegin(GL_QUADS);
-
   glVertex2f(-8.5, 1.0 + player.getYPos());
   glVertex2f(-8.5, -1.0 + player.getYPos());
   glVertex2f(-8.0, -1.0 + player.getYPos());
   glVertex2f(-8.0, 1.0 + player.getYPos());
+  glEnd();
 
+  glBegin(GL_QUADS);
+  glVertex2f(8.5, 1.0 + mirror.getYPos());
+  glVertex2f(8.5, -1.0 + mirror.getYPos());
+  glVertex2f(8.0, -1.0 + mirror.getYPos());
+  glVertex2f(8.0, 1.0 + mirror.getYPos());
   glEnd();
 
   glPointSize(10.0);

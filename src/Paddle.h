@@ -2,10 +2,12 @@
 
 class Paddle {
   private:
-    float y_pos{0.0};
-    int state{1};
+    float *y_pos;
+    int *state;
 
   public:
-    int movePaddle(float delta_y);
+    Paddle(int, float); // int state, float y_pos
+    ~Paddle();  
+    int movePaddle(float);
     float getYPos();
 };
