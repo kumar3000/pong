@@ -8,8 +8,10 @@
 
 /*** Defines ***/
 #define FPS 1000/60
-#define STEP_SIZE 0.5 // 0.0 to 10.0
+#define MVSIZE 0.5 // 0.0 to 10.0
 #define WSIZE 500
+#define PTSIZE 10.0
+#define GRIDSIZE 10.0
 
 /*** Globals ***/
 Paddle player(1, 0.0);
@@ -32,22 +34,18 @@ void display() {
 
   // player
   glBegin(GL_QUADS);
-  glVertex2f(-8.5, 1.0 + player.getYPos());
-  glVertex2f(-8.5, -1.0 + player.getYPos());
-  glVertex2f(-8.0, -1.0 + player.getYPos());
-  glVertex2f(-8.0, 1.0 + player.getYPos());
+  for (int i = 0; i < 4; i++)
+    glVertex2f(player.getVertexX(i), player.getVertexY(i));
   glEnd();
   
   // mirror
   glBegin(GL_QUADS);
-  glVertex2f(8.5, 1.0 + mirror.getYPos());
-  glVertex2f(8.5, -1.0 + mirror.getYPos());
-  glVertex2f(8.0, -1.0 + mirror.getYPos());
-  glVertex2f(8.0, 1.0 + mirror.getYPos());
+  for (int i = 0; i < 4; i++)
+    glVertex2f(-mirror.getVertexX(i), mirror.getVertexY(i));
   glEnd();
 
   // ball
-  glPointSize(10.0);
+  glPointSize(PTSIZE);
   glBegin(GL_POINTS);
   glVertex2f(0, 0);
   glEnd();
@@ -61,7 +59,7 @@ void reshape(int w, int h) {
   // projection
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
-  gluOrtho2D(-10, 10, -10, 10);
+  gluOrtho2D(-GRIDSIZE, GRIDSIZE, -GRIDSIZE, GRIDSIZE);
 
   glMatrixMode(GL_MODELVIEW);
 }
@@ -69,12 +67,12 @@ void reshape(int w, int h) {
 void readKey(int key, int, int) {
   switch (key) {
     case GLUT_KEY_UP:
-      if (player.movePaddle(STEP_SIZE) == 1 || mirror.movePaddle(STEP_SIZE) == 1)
+      if (player.movePaddle(MVSIZE) == 1 || mirror.movePaddle(MVSIZE) == 1)
         debug("*.movePaddle() { error }");
       std::cout << "GLUT_KEY_UP: " << player.getYPos() << std::endl;
       break;
     case GLUT_KEY_DOWN:
-      if (player.movePaddle(-STEP_SIZE) == 1 || mirror.movePaddle(-STEP_SIZE) == 1)
+      if (player.movePaddle(-MVSIZE) == 1 || mirror.movePaddle(-MVSIZE) == 1)
         debug("*.movePaddle() { error }");
       std::cout << "GLUT_KEY_DOWN: " << player.getYPos() << std::endl;
       break;
