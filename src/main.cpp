@@ -1,4 +1,4 @@
-/*** GLUT includes ***/
+/*** Includes ***/
 #include <GL/gl.h>
 #include <GL/glu.h>
 #include <GL/glut.h>
@@ -6,15 +6,18 @@
 #include <cstdlib>
 #include "Paddle.h"
 
+/*** Defines ***/
+#define FPS 1000/60
+
 /*** Globals ***/
 Paddle player;
 
+/*** Utilities ***/
 void debug(std::string error) {
   std::cout << error << std::endl;
   exit(1);
 }
 
-/*** inits ***/
 void init() {
   glClearColor(0.0, 0.0, 0.0, 1.0);
 }
@@ -56,7 +59,7 @@ void reshape(int w, int h) {
 
 void timer(int) { // not using int so i'm not specifying it...
   glutPostRedisplay();
-  glutTimerFunc(1000/60, timer, 0); // 1000/60 = 60fps window refresh rate
+  glutTimerFunc(FPS, timer, 0);
 
   if (player.movePaddle() == 1) {
     debug("player.movePaddle() { error }");
