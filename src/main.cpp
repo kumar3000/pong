@@ -29,13 +29,15 @@ void display() {
   glClear(GL_COLOR_BUFFER_BIT); // clear screen for display
   glLoadIdentity();
 
+  // player
   glBegin(GL_QUADS);
   glVertex2f(-8.5, 1.0 + player.getYPos());
   glVertex2f(-8.5, -1.0 + player.getYPos());
   glVertex2f(-8.0, -1.0 + player.getYPos());
   glVertex2f(-8.0, 1.0 + player.getYPos());
   glEnd();
-
+  
+  // mirror
   glBegin(GL_QUADS);
   glVertex2f(8.5, 1.0 + mirror.getYPos());
   glVertex2f(8.5, -1.0 + mirror.getYPos());
@@ -43,11 +45,10 @@ void display() {
   glVertex2f(8.0, 1.0 + mirror.getYPos());
   glEnd();
 
+  // ball
   glPointSize(10.0);
   glBegin(GL_POINTS);
-
   glVertex2f(0, 0);
-
   glEnd();
 
   glutSwapBuffers();
