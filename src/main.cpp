@@ -7,7 +7,7 @@
 #include "Paddle.h"
 
 /*** Defines ***/
-#define FPS 1000/60
+#define FPS 1000/60 // 1000/DESIRED_FPS
 #define MVSIZE 0.5 // 0.0 to 10.0
 #define WSIZE 500
 #define PTSIZE 10.0
@@ -76,12 +76,12 @@ void reshape(int w, int h) {
 void readKey(int key, int, int) {
   switch (key) {
     case GLUT_KEY_UP:
-      if (player.movePaddle(MVSIZE) == 1 || mirror.movePaddle(MVSIZE) == 1)
+      if (player.movePaddle(1, MVSIZE) == 1 || mirror.movePaddle(1, MVSIZE) == 1)
         debug("*.movePaddle() { error }");
       std::cout << "GLUT_KEY_UP: " << player.getYPos() << std::endl;
       break;
     case GLUT_KEY_DOWN:
-      if (player.movePaddle(-MVSIZE) == 1 || mirror.movePaddle(-MVSIZE) == 1)
+      if (player.movePaddle(0, MVSIZE) == 1 || mirror.movePaddle(0, MVSIZE) == 1)
         debug("*.movePaddle() { error }");
       std::cout << "GLUT_KEY_DOWN: " << player.getYPos() << std::endl;
       break;
@@ -89,10 +89,10 @@ void readKey(int key, int, int) {
 }
 
 void timer(int) { // not using int so i'm not specifying it...
+  glutSpecialFunc(readKey);
+
   glutPostRedisplay();
   glutTimerFunc(FPS, timer, 0);
-  
-  glutSpecialFunc(readKey);
 }
 
 

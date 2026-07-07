@@ -13,7 +13,7 @@ class Paddle {
     Paddle(int s, float y, const std::array<Point, 4> &pts); // int state, float y_pos
     ~Paddle() = default;
 
-    int movePaddle(float);
+    int movePaddle(int, float);
     float getYPos() const;
     float getVertexY(int) const;
     void setVertexY(int, float);

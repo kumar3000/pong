@@ -2,21 +2,25 @@
 
 Paddle::Paddle(int s, float y, const std::array<Point, 4> &pts) : state(s), y_pos(y), vertices(pts) {}
 
-int Paddle::movePaddle(float delta_y) {
-  if (delta_y > 0.0 && y_pos < 9) {
-    y_pos += delta_y;
-    for (int i = 0; i < 4; i++)
-      vertices[i].y += delta_y;
-  } else if (delta_y < 0.0 && y_pos > -9) {
-    y_pos += delta_y;
-    for (int i = 0; i < 4; i++)
-      vertices[i].y += delta_y;
+int Paddle::movePaddle(int direction, float step) {
+  int i;
+
+  if (direction && y_pos < 9) {
+    for (i = 0; i < 4; i++) {
+      vertices[i].y += step;
+    }
+    y_pos += step;
+  } else if (!direction && y_pos > -9) {
+    for (i = 0; i < 4; i++) {
+      vertices[i].y -= step;
+    }
+    y_pos -= step;
   }
 
-  if (y_pos < -9 || y_pos > 9)
+  if (y_pos > 9 || y_pos < -9)
     return 1;
 
-  return 0; // success
+  return 0;
 }
 
 float Paddle::getYPos() const {
