@@ -6,11 +6,11 @@ int Paddle::movePaddle(float delta_y) {
   if (delta_y > 0.0 && y_pos < 9) {
     y_pos += delta_y;
     for (int i = 0; i < 4; i++)
-      vertices[i][1] += delta_y;
+      vertices[i].y += delta_y;
   } else if (delta_y < 0.0 && y_pos > -9) {
     y_pos += delta_y;
     for (int i = 0; i < 4; i++)
-      vertices[i][1] += delta_y;
+      vertices[i].y += delta_y;
   }
 
   if (y_pos < -9 || y_pos > 9)
@@ -24,17 +24,17 @@ float Paddle::getYPos() {
 }
 
 float Paddle::getVertexY(int idx) {
-  return vertices[idx][1];
+  return vertices[idx].y;
 }
 
 void Paddle::setVertexY(int idx, float val) {
-  vertices[idx][1] = val;
+  vertices[idx].y = val;
 }
 
 float Paddle::getVertexX(int idx) {
-  return vertices[idx][0];
+  return vertices[idx].x;
 }
 
 void Paddle::setVertexX(int idx, float val) {
-  vertices[idx][0] = val;
+  vertices[idx].x = val;
 }
