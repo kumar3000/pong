@@ -16,9 +16,9 @@ class Paddle {
     ~Paddle() = default;
 
     int movePaddle(float);
-    float getYPos();
-    float getVertexY(int);
+    float getYPos() const;
+    float getVertexY(int) const;
     void setVertexY(int, float);
-    float getVertexX(int);
+    float getVertexX(int) const;
     void setVertexX(int, float);
 };

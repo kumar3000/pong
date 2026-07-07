@@ -97,10 +97,10 @@ int main(int argc, char **argv) {
 
   glutCreateWindow("pingy pongy");
 
+  init();
   glutDisplayFunc(display);
   glutReshapeFunc(reshape);
   glutTimerFunc(0, timer, 0);
-  init();
 
   glutMainLoop();
   return 0;

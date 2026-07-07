@@ -19,11 +19,11 @@ int Paddle::movePaddle(float delta_y) {
   return 0; // success
 }
 
-float Paddle::getYPos() {
+float Paddle::getYPos() const {
   return y_pos;
 }
 
-float Paddle::getVertexY(int idx) {
+float Paddle::getVertexY(int idx) const {
   return vertices[idx].y;
 }
 
@@ -31,7 +31,7 @@ void Paddle::setVertexY(int idx, float val) {
   vertices[idx].y = val;
 }
 
-float Paddle::getVertexX(int idx) {
+float Paddle::getVertexX(int idx) const {
   return vertices[idx].x;
 }
 
