@@ -9,10 +9,11 @@
 /*** Defines ***/
 #define FPS 1000/60
 #define STEP_SIZE 0.5 // 0.0 to 10.0
+#define WSIZE 500
 
 /*** Globals ***/
 Paddle player(1, 0.0);
-Paddle &mirror = player;
+Paddle mirror(1, 0.0);
 
 /*** Utilities ***/
 void debug(std::string error) {
@@ -68,14 +69,14 @@ void reshape(int w, int h) {
 void readKey(int key, int, int) {
   switch (key) {
     case GLUT_KEY_UP:
-      std::cout << "GLUT_KEY_UP" << std::endl;
-      if (player.movePaddle(STEP_SIZE) == 1)
-        debug("player.movePaddle() { error }");
+      if (player.movePaddle(STEP_SIZE) == 1 || mirror.movePaddle(STEP_SIZE) == 1)
+        debug("*.movePaddle() { error }");
+      std::cout << "GLUT_KEY_UP: " << player.getYPos() << std::endl;
       break;
     case GLUT_KEY_DOWN:
-      std::cout << "GLUT_KEY_DOWN" << std::endl;
-      if (player.movePaddle(-STEP_SIZE) == 1)
-        debug("player.movePaddle() { error }");
+      if (player.movePaddle(-STEP_SIZE) == 1 || mirror.movePaddle(-STEP_SIZE) == 1)
+        debug("*.movePaddle() { error }");
+      std::cout << "GLUT_KEY_DOWN: " << player.getYPos() << std::endl;
       break;
   }
 }
@@ -94,7 +95,7 @@ int main(int argc, char **argv) {
   glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE);
 
   glutInitWindowPosition(200, 100);
-  glutInitWindowSize(500, 500);
+  glutInitWindowSize(WSIZE, WSIZE);
 
   glutCreateWindow("pingy pongy");
 
