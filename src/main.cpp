@@ -8,6 +8,7 @@
 
 /*** Defines ***/
 #define FPS 1000/60
+#define STEP_SIZE 0.5 // 0.0 to 10.0
 
 /*** Globals ***/
 Paddle player;
@@ -57,14 +58,28 @@ void reshape(int w, int h) {
   glMatrixMode(GL_MODELVIEW);
 }
 
+void readKey(int key, int, int) {
+  switch (key) {
+    case GLUT_KEY_UP:
+      std::cout << "GLUT_KEY_UP" << std::endl;
+      if (player.movePaddle(STEP_SIZE) == 1)
+        debug("player.movePaddle() { error }");
+      break;
+    case GLUT_KEY_DOWN:
+      std::cout << "GLUT_KEY_DOWN" << std::endl;
+      if (player.movePaddle(-STEP_SIZE) == 1)
+        debug("player.movePaddle() { error }");
+      break;
+  }
+}
+
 void timer(int) { // not using int so i'm not specifying it...
   glutPostRedisplay();
   glutTimerFunc(FPS, timer, 0);
-
-  if (player.movePaddle() == 1) {
-    debug("player.movePaddle() { error }");
-  }
+  
+  glutSpecialFunc(readKey);
 }
+
 
 /*** Entry Point ***/
 int main(int argc, char **argv) {

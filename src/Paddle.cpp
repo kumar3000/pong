@@ -1,21 +1,12 @@
 #include "Paddle.h"
 
-int Paddle::movePaddle() {
-  if (this->state == 1) {
-    if (this->y_pos < 9) {
-      this->y_pos += 0.2;
-    } else {
-      this->state = -1;
-    }
-  } else if (this->state == -1) {
-    if (this->y_pos > -9) {
-      this->y_pos -= 0.2;
-    } else {
-      this->state = 1;
-    }
-  } else {
-    return 1; // exit failure
+int Paddle::movePaddle(float delta_y) {
+  if (delta_y > 0.0 && this->y_pos < 9.0) {
+    this->y_pos += delta_y;
+  } else if (delta_y < 0.0 && this->y_pos > -9.0) {
+    this->y_pos += delta_y;
   }
+
   return 0; // exit success
 }
 

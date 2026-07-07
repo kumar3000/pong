@@ -6,6 +6,6 @@ class Paddle {
     int state{1};
 
   public:
-    int movePaddle();
+    int movePaddle(float delta_y);
     float getYPos();
 };
