@@ -6,17 +6,19 @@ struct Point { float x, y; };
 class Paddle {
   private:
     int state;
-    float y_pos; // center of the paddle
+    float center; // center of the paddle
     std::array<Point, 4> vertices;
 
   public:
     Paddle(int s, float y, const std::array<Point, 4> &pts); // int state, float y_pos
     ~Paddle() = default;
 
-    int movePaddle(int, float);
-    float getYPos() const;
+    float getCenter() const;
+    void setCenter(float);
     float getVertexY(int) const;
     void setVertexY(int, float);
     float getVertexX(int) const;
     void setVertexX(int, float);
+    int getState();
+    void setState(int);
 };

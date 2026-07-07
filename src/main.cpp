@@ -18,13 +18,14 @@ std::array<Point, 4> playerPoints {{
   {-8.5, 1.0}, {-8.5, -1.0}, {-8, -1.0}, {-8, 1.0}
 }};
 
-
 std::array<Point, 4> mirrorPoints {{
   {8.5, 1.0}, {8.5, -1.0}, {8, -1.0}, {8, 1.0}
 }};
 
-Paddle player(1, 0.0, playerPoints);
-Paddle mirror(1, 0.0, mirrorPoints);
+Paddle player(2, 0.0, playerPoints);
+Paddle mirror(2, 0.0, mirrorPoints);
+
+float speed = 0.2f;
 
 /*** Utilities ***/
 void debug(std::string error) {
@@ -46,7 +47,7 @@ void display() {
   for (int i = 0; i < 4; i++)
     glVertex2f(player.getVertexX(i), player.getVertexY(i));
   glEnd();
-  
+
   // mirror
   glBegin(GL_QUADS);
   for (int i = 0; i < 4; i++)
@@ -73,28 +74,36 @@ void reshape(int w, int h) {
   glMatrixMode(GL_MODELVIEW);
 }
 
-void readKey(int key, int, int) {
+void readState(int key, int, int) {
   switch (key) {
     case GLUT_KEY_UP:
-      if (player.movePaddle(1, MVSIZE) == 1 || mirror.movePaddle(1, MVSIZE) == 1)
-        debug("*.movePaddle() { error }");
-      std::cout << "GLUT_KEY_UP: " << player.getYPos() << std::endl;
+      player.setState(1);
       break;
     case GLUT_KEY_DOWN:
-      if (player.movePaddle(0, MVSIZE) == 1 || mirror.movePaddle(0, MVSIZE) == 1)
-        debug("*.movePaddle() { error }");
-      std::cout << "GLUT_KEY_DOWN: " << player.getYPos() << std::endl;
+      player.setState(0);
+      break;
+    default:
+      player.setState(2);
       break;
   }
 }
 
 void timer(int) { // not using int so i'm not specifying it...
-  glutSpecialFunc(readKey);
+  if (player.getState() == 1 && player.getCenter() < 9) {
+    for (int i = 0; i < 4; i++) {
+      player.setVertexY(i, player.getVertexY(i) + speed);
+    }
+    player.setCenter(player.getCenter() + speed);
+  } else if (player.getState() == 0 && player.getCenter() > -9) {
+    for (int i = 0; i < 4; i++) {
+      player.setVertexY(i, player.getVertexY(i) - speed);
+    }
+    player.setCenter(player.getCenter() - speed);
+  }
 
   glutPostRedisplay();
   glutTimerFunc(FPS, timer, 0);
 }
-
 
 /*** Entry Point ***/
 int main(int argc, char **argv) {
@@ -109,6 +118,7 @@ int main(int argc, char **argv) {
   init();
   glutDisplayFunc(display);
   glutReshapeFunc(reshape);
+  glutSpecialFunc(readState);
   glutTimerFunc(0, timer, 0);
 
   glutMainLoop();
