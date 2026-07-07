@@ -1,6 +1,6 @@
 #include "Paddle.h"
 
-Paddle::Paddle(int s, float y) : state(s), y_pos(y) {}
+Paddle::Paddle(int s, float y, const std::array<Point, 4> &pts) : state(s), y_pos(y), vertices(pts) {}
 
 int Paddle::movePaddle(float delta_y) {
   if (delta_y > 0.0 && y_pos < 9) {

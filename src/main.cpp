@@ -14,8 +14,17 @@
 #define GRIDSIZE 10.0
 
 /*** Globals ***/
-Paddle player(1, 0.0);
-Paddle mirror(1, 0.0);
+std::array<Point, 4> playerPoints {{
+  {-8.5, 1.0}, {-8.5, -1.0}, {-8, -1.0}, {-8, 1.0}
+}};
+
+
+std::array<Point, 4> mirrorPoints {{
+  {8.5, 1.0}, {8.5, -1.0}, {8, -1.0}, {8, 1.0}
+}};
+
+Paddle player(1, 0.0, playerPoints);
+Paddle mirror(1, 0.0, mirrorPoints);
 
 /*** Utilities ***/
 void debug(std::string error) {
@@ -41,7 +50,7 @@ void display() {
   // mirror
   glBegin(GL_QUADS);
   for (int i = 0; i < 4; i++)
-    glVertex2f(-mirror.getVertexX(i), mirror.getVertexY(i));
+    glVertex2f(mirror.getVertexX(i), mirror.getVertexY(i));
   glEnd();
 
   // ball

@@ -7,12 +7,10 @@ class Paddle {
   private:
     int state;
     float y_pos; // center of the paddle
-    std::array<Point, 4> vertices = {{
-      {-8.5f, 1.0f}, {-8.5f, -1.0f}, {-8.0f, -1.0f}, {-8.0f, 1.0f}
-    }};
+    std::array<Point, 4> vertices;
 
   public:
-    Paddle(int, float); // int state, float y_pos
+    Paddle(int s, float y, const std::array<Point, 4> &pts); // int state, float y_pos
     ~Paddle() = default;
 
     int movePaddle(float);
