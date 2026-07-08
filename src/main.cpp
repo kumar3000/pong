@@ -15,13 +15,16 @@
 #define GRIDSIZE 10.0f
 #define PADLSPEED 0.15f
 #define BALLSPEED 0.15f
-#define DIFFICULTY 0.01f // how much the ball speeds up by per collision
+#define DIFFICULTY 0.0f // how much the ball speeds up by per collision
 
 /*** Globals ***/
-std::array<Point, 4> playerPoints {{
+/* std::array<Point, 4> playerPointsLeft {{
   {-8.5, 1.0}, {-8.5, -1.0}, {-8, -1.0}, {-8, 1.0}
+}}; */
+std::array<Point, 4> playerPointsOrigin {{
+  {-0.25f, 1.0f}, {-0.25f, -1.0f}, {0.25f, -1.0f}, {0.25f, 1.0f}
 }};
-Paddle player(2, 0.0, playerPoints);
+Paddle player(2, 0.0f, playerPointsOrigin);
 
 /* std::array<Point, 4> mirrorPoints {{
   {8.5, 1.0}, {8.5, -1.0}, {8, -1.0}, {8, 1.0}
@@ -42,10 +45,18 @@ void init() {
 }
 
 void collision() {
-  if (ball.getX() <= player.getVertexX(3) && ball.getY() < player.getVertexY(3) && ball.getY() > player.getVertexY(2)) {
+  if (ball.getX() <= player.getVertexX(3) 
+      && ball.getX() >= player.getVertexX(0) 
+      && ball.getY() <= player.getVertexY(0) 
+      && ball.getY() >= player.getVertexY(1)) {
     player.setScore(1);
     ball.setSpeed(ball.getSpeed() + DIFFICULTY);
-    ball.setHorzState(1);
+
+    if (ball.getHorzState() == 1) {
+      ball.setHorzState(0);
+    } else {
+      ball.setHorzState(1);
+    }
   }
 }
 
@@ -97,7 +108,7 @@ void display() {
   glVertex2f(ball.getX(), ball.getY());
   glEnd();
 
-  renderChar(0.0f, 0.0f, GLUT_BITMAP_TIMES_ROMAN_24, player.getScore() % 10 + 48, 1.0f, 1.0f, 1.0f);
+  renderChar(-GRIDSIZE + 0.5, GRIDSIZE - 1.0, GLUT_BITMAP_TIMES_ROMAN_24, player.getScore() % 10 + 48, 1.0f, 1.0f, 1.0f);
 
   glutSwapBuffers();
 }
