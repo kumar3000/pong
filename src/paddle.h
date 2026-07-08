@@ -1,7 +1,8 @@
-#pragma once // prevents header from being included multiple times
-#include <array>
+#ifndef PADDLE_H
+#define PADDLE_H
 
-struct Point { float x, y; };
+#include <array>
+#include <point.h>
 
 class Paddle {
   private:
@@ -22,3 +23,5 @@ class Paddle {
     int getState();
     void setState(int);
 };
+
+#endif

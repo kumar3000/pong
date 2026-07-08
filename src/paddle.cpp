@@ -1,4 +1,4 @@
-#include "Paddle.h"
+#include "paddle.h"
 
 Paddle::Paddle(int s, float y, const std::array<Point, 4> &pts) : state(s), center(y), vertices(pts) {}
 

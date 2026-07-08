@@ -4,7 +4,7 @@
 #include <GL/glut.h>
 #include <iostream>
 #include <cstdlib>
-#include "Paddle.h"
+#include "paddle.h"
 
 /*** Defines ***/
 #define FPS 1000/60 // 1000/DESIRED_FPS
@@ -17,13 +17,14 @@
 std::array<Point, 4> playerPoints {{
   {-8.5, 1.0}, {-8.5, -1.0}, {-8, -1.0}, {-8, 1.0}
 }};
+Paddle player(2, 0.0, playerPoints);
 
-std::array<Point, 4> mirrorPoints {{
+/* std::array<Point, 4> mirrorPoints {{
   {8.5, 1.0}, {8.5, -1.0}, {8, -1.0}, {8, 1.0}
 }};
+Paddle mirror(2, 0.0, mirrorPoints); */
 
-Paddle player(2, 0.0, playerPoints);
-Paddle mirror(2, 0.0, mirrorPoints);
+Point ball = {0.0, 0.0};
 
 float speed = 0.2f;
 
@@ -49,15 +50,15 @@ void display() {
   glEnd();
 
   // mirror
-  glBegin(GL_QUADS);
+  /* glBegin(GL_QUADS);
   for (int i = 0; i < 4; i++)
     glVertex2f(mirror.getVertexX(i), mirror.getVertexY(i));
-  glEnd();
+  glEnd(); */
 
   // ball
   glPointSize(PTSIZE);
   glBegin(GL_POINTS);
-  glVertex2f(0, 0);
+  glVertex2f(ball.x, ball.y);
   glEnd();
 
   glutSwapBuffers();
@@ -89,12 +90,12 @@ void readState(int key, int, int) {
 }
 
 void timer(int) { // not using int so i'm not specifying it...
-  if (player.getState() == 1 && player.getCenter() < 9) {
+  if (player.getState() == 1 && player.getCenter() < GRIDSIZE - 1) {
     for (int i = 0; i < 4; i++) {
       player.setVertexY(i, player.getVertexY(i) + speed);
     }
     player.setCenter(player.getCenter() + speed);
-  } else if (player.getState() == 0 && player.getCenter() > -9) {
+  } else if (player.getState() == 0 && player.getCenter() > -GRIDSIZE + 1) {
     for (int i = 0; i < 4; i++) {
       player.setVertexY(i, player.getVertexY(i) - speed);
     }
