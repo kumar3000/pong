@@ -2,10 +2,7 @@
 
 Ball::Ball(Point p, float v, int x, int y) : pos(p), speed(v), horz(x), vert(y) {}
 
-Point Ball::moveBall(float gridSize, float ptSize) {
-  // This function returns the old coordinates of the ball
-  Point p = {pos.x, pos.y};
-
+void Ball::moveBall(float gridSize, float ptSize) {
   if (horz && pos.x < gridSize - ptSize / 100) {
     pos.x += speed;
   } else {
@@ -29,8 +26,6 @@ Point Ball::moveBall(float gridSize, float ptSize) {
   } else {
     vert = 1;
   }
-
-  return p;
 }
 
 float Ball::getX() const { return pos.x; }
@@ -38,6 +33,9 @@ void Ball::setX(float newx) { pos.x = newx; }
 
 float Ball::getY() const { return pos.y; }
 void Ball::setY(float newy) { pos.y = newy; }
+
+float Ball::getSpeed() const { return speed; }
+void Ball::setSpeed(float v) { speed = v; }
 
 int Ball::getHorzState() const { return horz; }
 void Ball::setHorzState(int state) { horz = state; }

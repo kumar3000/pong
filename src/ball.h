@@ -13,12 +13,14 @@ class Ball {
     Ball(Point, float, int, int);
     ~Ball() = default;
     
-    Point moveBall(float, float);
+    void moveBall(float, float);
 
     float getX() const;
     void setX(float);
     float getY() const;
     void setY(float);
+    float getSpeed() const;
+    void setSpeed(float);
     int getHorzState() const;
     void setHorzState(int);
     int getVertState() const;

@@ -27,8 +27,8 @@ Paddle player(2, 0.0, playerPoints);
 }};
 Paddle mirror(2, 0.0, mirrorPoints); */
 
-Point p = {5.0, 0.0};
-Ball ball(p, BALLSPEED, 1, 1);
+Point ballPoints = {5.0, 0.0};
+Ball ball(ballPoints, BALLSPEED, 1, 1);
 
 /*** Utilities ***/
 void debug(std::string error) {
@@ -38,6 +38,12 @@ void debug(std::string error) {
 
 void init() {
   glClearColor(0.0, 0.0, 0.0, 1.0);
+}
+
+void collision() {
+  if (ball.getX() <= player.getVertexX(3) && ball.getY() < player.getVertexY(3) && ball.getY() > player.getVertexY(2)) {
+    ball.setHorzState(1);
+  }
 }
 
 /*** Callback Functions ***/
@@ -106,8 +112,8 @@ void timer(int) {
   }
 
   // Ball movement
-  Point pNew = ball.moveBall(GRIDSIZE, PTSIZE);
-  std::cout << pNew.x << std::endl;
+  ball.moveBall(GRIDSIZE, PTSIZE);
+  collision();
 
   glutPostRedisplay();
   glutTimerFunc(FPS, timer, 0);
