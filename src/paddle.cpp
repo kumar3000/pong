@@ -11,5 +11,8 @@ void Paddle::setVertexY(int idx, float val) { vertices[idx].y = val; }
 float Paddle::getVertexX(int idx) const { return vertices[idx].x; }
 void Paddle::setVertexX(int idx, float val) { vertices[idx].x = val; }
 
-int Paddle::getState() { return state; }
+int Paddle::getState() const { return state; }
 void Paddle::setState(int s) { state = s; }
+
+int Paddle::getScore() const { return score; }
+void Paddle::setScore(int x) { score += x; }

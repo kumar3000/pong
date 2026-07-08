@@ -13,8 +13,9 @@
 #define WSIZE 500
 #define PTSIZE 10.0f
 #define GRIDSIZE 10.0f
-#define PADLSPEED 0.2f
-#define BALLSPEED 0.2f
+#define PADLSPEED 0.15f
+#define BALLSPEED 0.15f
+#define DIFFICULTY 0.01f // how much the ball speeds up by per collision
 
 /*** Globals ***/
 std::array<Point, 4> playerPoints {{
@@ -42,7 +43,32 @@ void init() {
 
 void collision() {
   if (ball.getX() <= player.getVertexX(3) && ball.getY() < player.getVertexY(3) && ball.getY() > player.getVertexY(2)) {
+    player.setScore(1);
+    ball.setSpeed(ball.getSpeed() + DIFFICULTY);
     ball.setHorzState(1);
+  }
+}
+
+void renderChar(float x, float y, void *font, int c, float r, float g, float b) {
+  glColor3f(r, g, b);
+  glRasterPos2f(x, y);
+
+  glutBitmapCharacter(font, c);
+}
+
+void readKey(unsigned char key, int, int) {
+  switch (key) {
+    case 3:
+      exit(0);
+    case 107:
+      player.setState(1);
+      break;
+    case 106:
+      player.setState(0);
+      break;
+    default:
+      player.setState(2);
+      break;
   }
 }
 
@@ -50,6 +76,8 @@ void collision() {
 void display() {
   glClear(GL_COLOR_BUFFER_BIT); // clear screen for display
   glLoadIdentity();
+  
+  glColor3f(1.0f, 1.0f, 1.0f);
 
   // player
   glBegin(GL_QUADS);
@@ -69,6 +97,8 @@ void display() {
   glVertex2f(ball.getX(), ball.getY());
   glEnd();
 
+  renderChar(0.0f, 0.0f, GLUT_BITMAP_TIMES_ROMAN_24, player.getScore() % 10 + 48, 1.0f, 1.0f, 1.0f);
+
   glutSwapBuffers();
 }
 
@@ -81,20 +111,6 @@ void reshape(int w, int h) {
   gluOrtho2D(-GRIDSIZE, GRIDSIZE, -GRIDSIZE, GRIDSIZE);
 
   glMatrixMode(GL_MODELVIEW);
-}
-
-void readState(int key, int, int) {
-  switch (key) {
-    case GLUT_KEY_UP:
-      player.setState(1);
-      break;
-    case GLUT_KEY_DOWN:
-      player.setState(0);
-      break;
-    default:
-      player.setState(2);
-      break;
-  }
 }
 
 void timer(int) {
@@ -133,7 +149,7 @@ int main(int argc, char **argv) {
   init();
   glutDisplayFunc(display);
   glutReshapeFunc(reshape);
-  glutSpecialFunc(readState);
+  glutKeyboardFunc(readKey);
   glutTimerFunc(0, timer, 0);
 
   glutMainLoop();

@@ -7,6 +7,7 @@
 class Paddle {
   private:
     int state;
+    int score{0};
     float center; // center of the paddle
     std::array<Point, 4> vertices;
 
@@ -20,8 +21,10 @@ class Paddle {
     void setVertexY(int, float);
     float getVertexX(int) const;
     void setVertexX(int, float);
-    int getState();
+    int getState() const;
     void setState(int);
+    int getScore() const;
+    void setScore(int);
 };
 
 #endif
