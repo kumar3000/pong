@@ -5,13 +5,16 @@
 #include <iostream>
 #include <cstdlib>
 #include "paddle.h"
+#include "ball.h"
 
 /*** Defines ***/
 #define FPS 1000/60 // 1000/DESIRED_FPS
-#define MVSIZE 0.5 // 0.0 to 10.0
+#define MVSIZE 0.5f // 0.0 to 10.0
 #define WSIZE 500
-#define PTSIZE 10.0
-#define GRIDSIZE 10.0
+#define PTSIZE 10.0f
+#define GRIDSIZE 10.0f
+#define PADLSPEED 0.2f
+#define BALLSPEED 0.2f
 
 /*** Globals ***/
 std::array<Point, 4> playerPoints {{
@@ -24,9 +27,8 @@ Paddle player(2, 0.0, playerPoints);
 }};
 Paddle mirror(2, 0.0, mirrorPoints); */
 
-Point ball = {0.0, 0.0};
-
-float speed = 0.2f;
+Point p = {5.0, 0.0};
+Ball ball(p, BALLSPEED, 1, 1);
 
 /*** Utilities ***/
 void debug(std::string error) {
@@ -58,7 +60,7 @@ void display() {
   // ball
   glPointSize(PTSIZE);
   glBegin(GL_POINTS);
-  glVertex2f(ball.x, ball.y);
+  glVertex2f(ball.getX(), ball.getY());
   glEnd();
 
   glutSwapBuffers();
@@ -89,22 +91,28 @@ void readState(int key, int, int) {
   }
 }
 
-void timer(int) { // not using int so i'm not specifying it...
+void timer(int) {
+  // Player paddle movement
   if (player.getState() == 1 && player.getCenter() < GRIDSIZE - 1) {
     for (int i = 0; i < 4; i++) {
-      player.setVertexY(i, player.getVertexY(i) + speed);
+      player.setVertexY(i, player.getVertexY(i) + PADLSPEED);
     }
-    player.setCenter(player.getCenter() + speed);
+    player.setCenter(player.getCenter() + PADLSPEED);
   } else if (player.getState() == 0 && player.getCenter() > -GRIDSIZE + 1) {
     for (int i = 0; i < 4; i++) {
-      player.setVertexY(i, player.getVertexY(i) - speed);
+      player.setVertexY(i, player.getVertexY(i) - PADLSPEED);
     }
-    player.setCenter(player.getCenter() - speed);
+    player.setCenter(player.getCenter() - PADLSPEED);
   }
+
+  // Ball movement
+  Point pNew = ball.moveBall(GRIDSIZE, PTSIZE);
+  std::cout << pNew.x << std::endl;
 
   glutPostRedisplay();
   glutTimerFunc(FPS, timer, 0);
 }
+
 
 /*** Entry Point ***/
 int main(int argc, char **argv) {
