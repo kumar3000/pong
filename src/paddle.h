@@ -8,15 +8,15 @@ class Paddle {
   private:
     int state;
     int score{0};
-    float center; // center of the paddle
+    Point *center; // center of the paddle
     std::array<Point, 4> vertices;
 
   public:
-    Paddle(int s, float y, const std::array<Point, 4> &pts); // int state, float y_pos
-    ~Paddle() = default;
+    Paddle(int s, const std::array<Point, 4> &pts); // int state, float y_pos
+    ~Paddle();
 
-    float getCenter() const;
-    void setCenter(float);
+    Point* getCenter() const;
+    void setCenter(Point*);
     float getVertexY(int) const;
     void setVertexY(int, float);
     float getVertexX(int) const;

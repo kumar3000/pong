@@ -1,9 +1,18 @@
 #include "paddle.h"
 
-Paddle::Paddle(int s, float y, const std::array<Point, 4> &pts) : state(s), center(y), vertices(pts) {}
+Paddle::Paddle(int s, const std::array<Point, 4> &pts) : state(s), vertices(pts) {
+  float x, y;
+  x = (vertices[3].x + vertices[0].x) / 2;
+  y = (vertices[0].y + vertices[1].y) / 2;
+  center = new Point(x, y);
+}
 
-float Paddle::getCenter() const { return center; }
-void Paddle::setCenter(float c) { center = c; }
+Paddle::~Paddle() {
+  delete center;
+}
+
+Point* Paddle::getCenter() const { return center; }
+void Paddle::setCenter(Point *c) { center->x = c->x; center->y = c->y; }
 
 float Paddle::getVertexY(int idx) const { return vertices[idx].y; }
 void Paddle::setVertexY(int idx, float val) { vertices[idx].y = val; }

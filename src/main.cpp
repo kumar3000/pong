@@ -14,23 +14,27 @@
 #define PTSIZE 10.0f
 #define GRIDSIZE 10.0f
 #define PADLSPEED 0.15f
-#define BALLSPEED 0.15f
+#define BALLSPEED 0.2f
 #define DIFFICULTY 0.0f // how much the ball speeds up by per collision
 
 /*** Globals ***/
-/* std::array<Point, 4> playerPointsLeft {{
+std::array<Point, 4> playerPointsLeft {{ // left
   {-8.5, 1.0}, {-8.5, -1.0}, {-8, -1.0}, {-8, 1.0}
-}}; */
-std::array<Point, 4> playerPointsOrigin {{
+  }};
+std::array<Point, 4> playerPointsOrigin {{ // middle
   {-0.25f, 1.0f}, {-0.25f, -1.0f}, {0.25f, -1.0f}, {0.25f, 1.0f}
 }};
-Paddle player(2, 0.0f, playerPointsOrigin);
+std::array<Point, 4> playerPointsFlat {{ // wide top-bottom
+  {-5.0f, 1.0f}, {-5.0f, -1.0f}, {5.0f, -1.0f}, {5.0f, 1.0f}
+}};
+Paddle player(2, playerPointsLeft);
 
 /* std::array<Point, 4> mirrorPoints {{
-  {8.5, 1.0}, {8.5, -1.0}, {8, -1.0}, {8, 1.0}
-}};
-Paddle mirror(2, 0.0, mirrorPoints); */
+   {8.5, 1.0}, {8.5, -1.0}, {8, -1.0}, {8, 1.0}
+   }};
+   Paddle mirror(2, 0.0, mirrorPoints); */
 
+Point new_c = {player.getCenter()->x, player.getCenter()->y};
 Point ballPoints = {5.0, 0.0};
 Ball ball(ballPoints, BALLSPEED, 1, 1);
 
@@ -44,20 +48,18 @@ void init() {
   glClearColor(0.0, 0.0, 0.0, 1.0);
 }
 
-void collision() {
-  if (ball.getX() <= player.getVertexX(3) 
-      && ball.getX() >= player.getVertexX(0) 
-      && ball.getY() <= player.getVertexY(0) 
-      && ball.getY() >= player.getVertexY(1)) {
-    player.setScore(1);
-    ball.setSpeed(ball.getSpeed() + DIFFICULTY);
-
-    if (ball.getHorzState() == 1) {
-      ball.setHorzState(0);
-    } else {
+bool collision() {
+  if (ball.getY() < player.getVertexY(0) && ball.getY() > player.getVertexY(1)) {
+    if (ball.getX() < player.getVertexX(3) && ball.getX() > player.getCenter()->x) {
       ball.setHorzState(1);
+      return true;
+    } else if (ball.getX() > player.getVertexX(0) && ball.getX() < player.getCenter()->x) {
+      ball.setHorzState(0);
+      return true;
     }
   }
+
+  return false;
 }
 
 void renderChar(float x, float y, void *font, int c, float r, float g, float b) {
@@ -87,7 +89,7 @@ void readKey(unsigned char key, int, int) {
 void display() {
   glClear(GL_COLOR_BUFFER_BIT); // clear screen for display
   glLoadIdentity();
-  
+
   glColor3f(1.0f, 1.0f, 1.0f);
 
   // player
@@ -98,9 +100,9 @@ void display() {
 
   // mirror
   /* glBegin(GL_QUADS);
-  for (int i = 0; i < 4; i++)
-    glVertex2f(mirror.getVertexX(i), mirror.getVertexY(i));
-  glEnd(); */
+     for (int i = 0; i < 4; i++)
+     glVertex2f(mirror.getVertexX(i), mirror.getVertexY(i));
+     glEnd(); */
 
   // ball
   glPointSize(PTSIZE);
@@ -126,21 +128,24 @@ void reshape(int w, int h) {
 
 void timer(int) {
   // Player paddle movement
-  if (player.getState() == 1 && player.getCenter() < GRIDSIZE - 1) {
+  if (player.getState() == 1 && player.getCenter()->y < GRIDSIZE - 1) {
     for (int i = 0; i < 4; i++) {
       player.setVertexY(i, player.getVertexY(i) + PADLSPEED);
     }
-    player.setCenter(player.getCenter() + PADLSPEED);
-  } else if (player.getState() == 0 && player.getCenter() > -GRIDSIZE + 1) {
+    new_c.y = player.getCenter()->y + PADLSPEED;
+    player.setCenter(&new_c);
+  } else if (player.getState() == 0 && player.getCenter()->y > -GRIDSIZE + 1) {
     for (int i = 0; i < 4; i++) {
       player.setVertexY(i, player.getVertexY(i) - PADLSPEED);
     }
-    player.setCenter(player.getCenter() - PADLSPEED);
+    new_c.y = player.getCenter()->y - PADLSPEED;
+    player.setCenter(&new_c);
   }
 
   // Ball movement
   ball.moveBall(GRIDSIZE, PTSIZE);
-  collision();
+  if (collision())
+    player.setScore(1);
 
   glutPostRedisplay();
   glutTimerFunc(FPS, timer, 0);
